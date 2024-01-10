@@ -1,5 +1,5 @@
-# **Personal graduation project**
-
+# **Personal graduation project --- Network Security Experiment Platform (NSEP)**
+--- 
 *A network security experiment platform based on docker. The front end is based on Vue.js, the back end is based on Springboot+Mybatis-Plus. Deploy with Docker containers on personal cloud servers*
 #### Project address https://nsep.dongpeibin.cn (The server has expired. It may come back online in the future)
 ![image](https://github.com/dpb1526544/GraduationProject_NSEP/assets/79245576/c543a3b7-1db0-43b8-a538-f8ad45fca6be)
