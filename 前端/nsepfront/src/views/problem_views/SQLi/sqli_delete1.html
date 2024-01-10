@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>delete注入成功</title>
+</head>
+<body>
+
+<form action="http://localhost:8080/sqli/delete1" method="get">
+    <p  th:text="${error}" th:if="${not#strings.isEmpty(error)}"></p>
+</form>
+
+</body>
+</html>

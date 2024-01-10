@@ -1,0 +1,9 @@
+docker官方已经弃用jdk1.8，故需自己构建jdk1.8镜像
+
+自建jdk1.8环境，下载 jdk1.8 linux版本压缩包
+
+解压缩后，替换掉jdk包内的 jce.jar 包*（因为jdk1.8的jce包因为安全问题，会导致部署在服务器上的项目无法使用javax.mail包发送邮件）*
+
+将准备好的jdk1.8的包重新压缩为.tar.gz
+
+编写Dockerfile文件将准备好的 jdk1.8 构建为自己的可用镜像。

@@ -1,0 +1,8 @@
+#安装mysql 5.7
+docker pull mysql:5.7
+
+#部署mysql容器并配置挂载，外部访问端口为3307
+docker run -d -p 3307:3306 -v /home/mysql/conf:/etc/mysql/conf.d -v /home/mysql/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=Dpb1526544 --name mysql_dpb mysql:5.7
+
+#拉取centos7镜像，作为构建jdk1.8的底层文件系统
+docker pull centos:centos7

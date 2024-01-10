@@ -1,0 +1,7 @@
+将构建好的后端项目jar包上传到服务器某目录下，dockerfile文件放置于同目录下
+
+构建nsep镜像命令
+sudo docker build -t nsep:latest .
+
+启动docker部署的后端项目，并映射为8081端口
+# docker run -d --name="nsep_back" -p 8081:8081 nsep:latest
