@@ -209,7 +209,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        request.get("/forum/delete",{
+        request.delete("/forum/delete",{
           params:{
             forumid:forum.forumid,
           }

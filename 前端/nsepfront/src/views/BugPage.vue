@@ -147,7 +147,7 @@ export default {
       })
     },
     record(){
-      request.get("/stuproblem/recordinfo", {
+      request.post("/stuproblem/recordinfo", null, {
         params:{
           userid:this.user.userid,
           problemid:this.probleminfo.problemid,

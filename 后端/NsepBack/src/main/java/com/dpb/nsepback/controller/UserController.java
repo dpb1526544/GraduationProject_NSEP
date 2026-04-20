@@ -3,6 +3,7 @@ package com.dpb.nsepback.controller;
 import cn.hutool.core.util.StrUtil;
 import com.dpb.nsepback.common.Constants;
 import com.dpb.nsepback.common.Result;
+import com.dpb.nsepback.config.RequireRole;
 import com.dpb.nsepback.controller.dto.UserDTO;
 import com.dpb.nsepback.controller.dto.UserPasswordDTO;
 import com.dpb.nsepback.entity.Page;
@@ -36,7 +37,8 @@ public class UserController {
     }
 
     // 新增用户，注册
-    @GetMapping("/save")
+    @PostMapping("/save")
+    @RequireRole({3})
     public Result save(@RequestParam() String username, @RequestParam() String password,
                        @RequestParam() String realname, @RequestParam() String email, @RequestParam() String role){
         if (userMapper.selectbyun(username)==null){
@@ -92,7 +94,7 @@ public class UserController {
     }
 
     //邮箱重置密码
-    @GetMapping("/resetpwd")
+    @PostMapping("/resetpwd")
     public Result resetPwd(@RequestParam() String  username,@RequestParam() String password){
         userMapper.updatePasswordTwo(username,password);
         return Result.success();
@@ -118,14 +120,16 @@ public class UserController {
         return Result.success(userDTO);
     }
 
-    @GetMapping("/update")
+    @PutMapping("/update")
+    @RequireRole({3})
     public Result updatebyname(@RequestParam() String username,@RequestParam() String password,
                                @RequestParam() String realname,@RequestParam() String email,@RequestParam() String role){
         userMapper.updateuser(username,password,realname,email,role);
         return Result.success("success");
     }
 
-    @GetMapping("/delete")
+    @DeleteMapping("/delete")
+    @RequireRole({3})
     public Result deletebyname(@RequestParam() String username){
         userMapper.deleteeuser(username);
         return Result.success("success");

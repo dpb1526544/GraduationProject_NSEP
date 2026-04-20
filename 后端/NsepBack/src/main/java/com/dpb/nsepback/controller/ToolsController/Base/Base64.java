@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 @RestController
 public class Base64 {
@@ -57,33 +57,24 @@ public class Base64 {
     }
     //加密
     public static String setEncryptionBase64(String str){
-        byte[] b = null;
-        String s = null;
-        try {
-            b = str.getBytes("utf-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+        if (str == null) {
+            return null;
         }
-        if( b != null){
-            s = new BASE64Encoder().encode(b);
-        }
-        return s;
+        return Base64.getEncoder().encodeToString(str.getBytes(StandardCharsets.UTF_8));
 
     }
 
     //解密
     public static String getDecodeBase64(String str){
-        byte[] b = null;
-        String result = null;
-        if(str != null){
-            BASE64Decoder decoder = new BASE64Decoder();
-            try {
-                b = decoder.decodeBuffer(str);
-                result = new String(b, "utf-8");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        if (str == null) {
+            return null;
         }
-        return result;
+        try {
+            byte[] b = Base64.getDecoder().decode(str);
+            return new String(b, StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

@@ -8,6 +8,7 @@ import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.dpb.nsepback.common.Constants;
 import com.dpb.nsepback.config.AuthAccess;
+import com.dpb.nsepback.config.RequireRole;
 import com.dpb.nsepback.entity.User;
 import com.dpb.nsepback.exception.ServiceException;
 import com.dpb.nsepback.service.IUserService;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
 
 // JWT拦截器
 public class JwtInterceptor implements HandlerInterceptor {
@@ -65,6 +67,15 @@ public class JwtInterceptor implements HandlerInterceptor {
             jwtVerifier.verify(token); // 验证token
         } catch (JWTVerificationException e) {
             throw new ServiceException(Constants.CODE_401, "token验证失败，请重新登录");
+        }
+
+        HandlerMethod h = (HandlerMethod) handler;
+        RequireRole requireRole = h.getMethodAnnotation(RequireRole.class);
+        if (requireRole != null) {
+            boolean roleMatched = Arrays.stream(requireRole.value()).anyMatch(role -> role == user.getRole());
+            if (!roleMatched) {
+                throw new ServiceException(Constants.CODE_401, "权限不足");
+            }
         }
         return true;
     }

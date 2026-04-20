@@ -30,11 +30,11 @@ public interface UserMapper extends BaseMapper<User>  {
     int updateEmail(UserDTO userDTO);
 
     // 分页查找
-    @Select("select username,realname,email,password,role from  user where username like \"%${search}%\" limit #{beginPage},#{pageSize}")
+    @Select("select username,realname,email,password,role from user where username like concat('%', #{search}, '%') limit #{beginPage},#{pageSize}")
     List<User> getpage(Integer beginPage, Integer pageSize, String search);
 
     // 查询总数
-    @Select("select count(*) from user where username like \"%${search}%\"")
+    @Select("select count(*) from user where username like concat('%', #{search}, '%')")
     Integer gettotalpage(String search);
 
     // 根据id查姓名

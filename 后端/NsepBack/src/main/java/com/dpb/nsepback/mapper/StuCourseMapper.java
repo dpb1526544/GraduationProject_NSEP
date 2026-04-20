@@ -37,12 +37,12 @@ public interface StuCourseMapper extends BaseMapper<StuCourse> {
     int deletee(Integer userid);
 
     // 分页查找
-    @Select("select user.userid ,username,realname,email,finished from  stucourse, user where stucourse.userid =user.userid and" +
-            " courseid =#{courseid} and username like \"%${search}%\" limit #{beginPage},#{pageSize}")
+    @Select("select user.userid ,username,realname,email,finished from stucourse, user where stucourse.userid = user.userid and" +
+            " courseid = #{courseid} and username like concat('%', #{search}, '%') limit #{beginPage},#{pageSize}")
     List<User> getpage(Integer beginPage, Integer pageSize, String search, Integer courseid);
 
     // 计数
-    @Select("select count(*) from  stucourse, user where stucourse.userid =user.userid and courseid =#{courseid} and username like \"%${search}%\"")
+    @Select("select count(*) from stucourse, user where stucourse.userid = user.userid and courseid = #{courseid} and username like concat('%', #{search}, '%')")
     Integer gettotalpage(String search,Integer courseid);
 //    and username like "%${search}%"
 

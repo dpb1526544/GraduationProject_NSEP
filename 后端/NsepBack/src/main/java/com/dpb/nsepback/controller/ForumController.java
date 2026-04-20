@@ -2,6 +2,7 @@ package com.dpb.nsepback.controller;
 
 import com.dpb.nsepback.common.Constants;
 import com.dpb.nsepback.common.Result;
+import com.dpb.nsepback.config.RequireRole;
 import com.dpb.nsepback.entity.Forum;
 import com.dpb.nsepback.entity.Page;
 import com.dpb.nsepback.mapper.ForumMapper;
@@ -52,7 +53,8 @@ public class ForumController {
     }
 
     // 删除
-    @GetMapping("/delete")
+    @DeleteMapping("/delete")
+    @RequireRole({1,2,3})
     public Result delete(@RequestParam Integer forumid){
         int a=forumMapper.delbyid(forumid);
         if(a==1)

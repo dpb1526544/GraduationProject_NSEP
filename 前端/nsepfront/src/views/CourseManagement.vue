@@ -213,7 +213,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        request.get("/course/delete",{
+        request.delete("/course/delete",{
           params:{
             courseid:this.currentcourse
           }
@@ -234,7 +234,9 @@ export default {
       });
     },
     save(){
-      request.post("/user/save",this.form).then(res =>{
+      request.post("/user/save", null, {
+        params: this.form
+      }).then(res =>{
         console.log(res);
       })
       alert("save");
@@ -295,7 +297,7 @@ export default {
           })
           return false;
       }
-      request.get("/course/save",{
+      request.post("/course/save", null, {
         params:{
           coursename:this.coursename,
           teacherid:this.teacher.userid,
@@ -334,7 +336,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        request.get("/StuCourse/delete",{
+        request.delete("/StuCourse/delete",{
           params:{
             courseid:this.currentcourse,
             username:username
@@ -373,4 +375,3 @@ export default {
 }
 
 </style>
-

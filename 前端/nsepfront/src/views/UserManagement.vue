@@ -198,7 +198,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        request.get("/user/delete", {
+        request.delete("/user/delete", {
           params: {
             username: a
           }
@@ -226,8 +226,8 @@ export default {
       // }else this.user.role=1;
 
       console.log(this.user)
-      request.get("/user/save", {
-        params:{
+      request.post("/user/save", null, {
+        params: {
           username:this.user.username,
           password:this.user.password,
           realname:this.user.realname,
@@ -274,8 +274,8 @@ export default {
       // }else this.user.role=1;
       this.dialogVisible2=false;
       console.log(this.user)
-      request.get("/user/update", {
-        params:{
+      request.put("/user/update", null, {
+        params: {
           username:this.user.username,
           password:this.user.password,
           realname:this.user.realname,
@@ -317,4 +317,3 @@ export default {
 }
 
 </style>
-
