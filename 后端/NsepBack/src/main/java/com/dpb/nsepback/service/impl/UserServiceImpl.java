@@ -53,6 +53,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     public User register(UserDTO userDTO) {
         User one = getUserInfo(userDTO);
         if (one == null) {
+            if (!PasswordUtils.isStrong(userDTO.getPassword())) {
+                throw new ServiceException(Constants.CODE_600, "密码强度不足，需至少8位且包含字母和数字");
+            }
             one = new User();
             BeanUtil.copyProperties(userDTO, one, true);
             one.setPassword(PasswordUtils.encode(userDTO.getPassword()));

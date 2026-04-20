@@ -26,6 +26,15 @@ public class PasswordUtils {
         return !isBcryptEncoded(storedPassword);
     }
 
+    public static boolean isStrong(String rawPassword) {
+        if (rawPassword == null || rawPassword.length() < 8) {
+            return false;
+        }
+        boolean hasLetter = rawPassword.chars().anyMatch(Character::isLetter);
+        boolean hasDigit = rawPassword.chars().anyMatch(Character::isDigit);
+        return hasLetter && hasDigit;
+    }
+
     public static boolean matches(String rawPassword, String storedPassword) {
         if (rawPassword == null || storedPassword == null) {
             return false;

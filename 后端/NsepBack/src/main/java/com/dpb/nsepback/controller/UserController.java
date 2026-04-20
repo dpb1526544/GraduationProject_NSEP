@@ -42,6 +42,9 @@ public class UserController {
     @RequireRole({3})
     public Result save(@RequestParam() String username, @RequestParam() String password,
                        @RequestParam() String realname, @RequestParam() String email, @RequestParam() String role){
+        if (!PasswordUtils.isStrong(password)) {
+            return Result.error(Constants.CODE_400, "密码强度不足，需至少8位且包含字母和数字");
+        }
         if (userMapper.selectbyun(username)==null){
             userMapper.insertuser(username, PasswordUtils.encode(password),realname,email,role);
             return Result.success("success");
@@ -94,6 +97,9 @@ public class UserController {
         if (!PasswordUtils.matches(password, storedPassword)) {
             return Result.error(Constants.CODE_600, "原密码错误");
         }
+        if (!PasswordUtils.isStrong(newpassword)) {
+            return Result.error(Constants.CODE_400, "密码强度不足，需至少8位且包含字母和数字");
+        }
         userMapper.updatePasswordTwo(username, PasswordUtils.encode(newpassword));
         return Result.success();
     }
@@ -101,6 +107,9 @@ public class UserController {
     //邮箱重置密码
     @PostMapping("/resetpwd")
     public Result resetPwd(@RequestParam() String  username,@RequestParam() String password){
+        if (!PasswordUtils.isStrong(password)) {
+            return Result.error(Constants.CODE_400, "密码强度不足，需至少8位且包含字母和数字");
+        }
         userMapper.updatePasswordTwo(username, PasswordUtils.encode(password));
         return Result.success();
     }
@@ -133,6 +142,9 @@ public class UserController {
     @RequireRole({3})
     public Result updatebyname(@RequestParam() String username,@RequestParam() String password,
                                @RequestParam() String realname,@RequestParam() String email,@RequestParam() String role){
+        if (!PasswordUtils.isStrong(password)) {
+            return Result.error(Constants.CODE_400, "密码强度不足，需至少8位且包含字母和数字");
+        }
         userMapper.updateuser(username, PasswordUtils.encode(password),realname,email,role);
         return Result.success("success");
     }
