@@ -45,6 +45,10 @@ public interface UserMapper extends BaseMapper<User>  {
     @Select("select email from user where username=#{username}")
     String selectbyun(String username);
 
+    // 根据学号查密码
+    @Select("select password from user where username=#{username}")
+    String selectPasswordByUsername(String username);
+
     // 更新靶场完成数
     @Update("update user set finished = finished+1 where userid = #{userid}")
     int updateFinished(Integer userid);
@@ -64,5 +68,9 @@ public interface UserMapper extends BaseMapper<User>  {
     // 更新
     @Update("UPDATE user set password =#{password}, realname=#{realname},email=#{email},role=#{role} where username =#{username}")
     Integer updateuser(String username,String password, String realname,String email,String role);
+
+    // 更新邮箱（已在业务层完成密码校验）
+    @Update("update user set email = #{email} where username = #{username}")
+    int updateEmailByUsername(String username, String email);
 
 }

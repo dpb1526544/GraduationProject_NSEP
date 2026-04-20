@@ -10,6 +10,7 @@ import com.dpb.nsepback.entity.User;
 import com.dpb.nsepback.exception.ServiceException;
 import com.dpb.nsepback.mapper.UserMapper;
 import com.dpb.nsepback.service.IUserService;
+import com.dpb.nsepback.utils.PasswordUtils;
 import com.dpb.nsepback.utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,10 +29,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     public UserDTO login(UserDTO userDTO) {
         User one = getUserInfo(userDTO);
         if (one != null) {
-            if(one.getPassword().equals(userDTO.getPassword())){
+            if (PasswordUtils.matches(userDTO.getPassword(), one.getPassword())) {
+                if (!PasswordUtils.isEncoded(one.getPassword())) {
+                    String upgradedPassword = PasswordUtils.encode(userDTO.getPassword());
+                    userMapper.updatePasswordTwo(one.getUsername(), upgradedPassword);
+                    one.setPassword(upgradedPassword);
+                }
                 BeanUtil.copyProperties(one, userDTO, true);
                 //设置token
-                String token = TokenUtils.genToken(one.getUserid().toString(), one.getPassword().toString());
+                String token = TokenUtils.genToken(one.getUserid().toString(), one.getRole());
                 userDTO.setToken(token);
                 return userDTO;
             }else{
@@ -49,6 +55,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         if (one == null) {
             one = new User();
             BeanUtil.copyProperties(userDTO, one, true);
+            one.setPassword(PasswordUtils.encode(userDTO.getPassword()));
             // 默认学生
             one.setRole(1);
             // 把 copy完之后的用户对象存储到数据库

@@ -140,14 +140,11 @@ export default {
         this.$message.error("输入不能为空")
         return false
       }
-      if (this.userpw.password!=this.user.password) {
-        this.$message.error("原密码错误")
-        return false
-      }
       request.post("/user/repw", this.userpw).then(res => {
         console.log(res)
         if(res.code === '200') {
           this.$message.success("修改成功,请重新登录")
+          localStorage.removeItem("user")
           router.push("/login");
         } else {
           this.$message.error(res.msg)

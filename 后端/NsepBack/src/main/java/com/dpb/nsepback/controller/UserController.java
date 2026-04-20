@@ -10,6 +10,7 @@ import com.dpb.nsepback.entity.Page;
 import com.dpb.nsepback.entity.User;
 import com.dpb.nsepback.mapper.UserMapper;
 import com.dpb.nsepback.service.IUserService;
+import com.dpb.nsepback.utils.PasswordUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -42,7 +43,7 @@ public class UserController {
     public Result save(@RequestParam() String username, @RequestParam() String password,
                        @RequestParam() String realname, @RequestParam() String email, @RequestParam() String role){
         if (userMapper.selectbyun(username)==null){
-            userMapper.insertuser(username,password,realname,email,role);
+            userMapper.insertuser(username, PasswordUtils.ensureEncoded(password),realname,email,role);
             return Result.success("success");
         }else{
             return Result.error(Constants.CODE_600,"用户已存在");
@@ -89,14 +90,18 @@ public class UserController {
         if (StrUtil.isBlank(username) || StrUtil.isBlank(password) || StrUtil.isBlank(newpassword)) {
             return Result.error(Constants.CODE_400, "参数错误");
         }
-        userMapper.updatePassword(userPasswordDTO);
+        String storedPassword = userMapper.selectPasswordByUsername(username);
+        if (!PasswordUtils.matches(password, storedPassword)) {
+            return Result.error(Constants.CODE_600, "原密码错误");
+        }
+        userMapper.updatePasswordTwo(username, PasswordUtils.ensureEncoded(newpassword));
         return Result.success();
     }
 
     //邮箱重置密码
     @PostMapping("/resetpwd")
     public Result resetPwd(@RequestParam() String  username,@RequestParam() String password){
-        userMapper.updatePasswordTwo(username,password);
+        userMapper.updatePasswordTwo(username, PasswordUtils.ensureEncoded(password));
         return Result.success();
     }
 
@@ -108,7 +113,11 @@ public class UserController {
         if (StrUtil.isBlank(username) || StrUtil.isBlank(password)||StrUtil.isBlank(email)) {
             return Result.error(Constants.CODE_400, "参数错误");
         }
-        userMapper.updateEmail(userDTO);
+        String storedPassword = userMapper.selectPasswordByUsername(username);
+        if (!PasswordUtils.matches(password, storedPassword)) {
+            return Result.error(Constants.CODE_600, "密码错误");
+        }
+        userMapper.updateEmailByUsername(username, email);
         return Result.success();
     }
 
@@ -124,7 +133,7 @@ public class UserController {
     @RequireRole({3})
     public Result updatebyname(@RequestParam() String username,@RequestParam() String password,
                                @RequestParam() String realname,@RequestParam() String email,@RequestParam() String role){
-        userMapper.updateuser(username,password,realname,email,role);
+        userMapper.updateuser(username, PasswordUtils.ensureEncoded(password),realname,email,role);
         return Result.success("success");
     }
 

@@ -12,6 +12,7 @@ import com.dpb.nsepback.config.RequireRole;
 import com.dpb.nsepback.entity.User;
 import com.dpb.nsepback.exception.ServiceException;
 import com.dpb.nsepback.service.IUserService;
+import com.dpb.nsepback.utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -47,6 +48,14 @@ public class JwtInterceptor implements HandlerInterceptor {
             throw new ServiceException(Constants.CODE_401, "无token，请重新登录");
         }
 
+        // 服务端密钥验签 token
+        JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(TokenUtils.getJwtSecret())).build();
+        try {
+            jwtVerifier.verify(token);
+        } catch (JWTVerificationException e) {
+            throw new ServiceException(Constants.CODE_401, "token验证失败，请重新登录");
+        }
+
         // 获取 token 中的 user id
         String userId;
         try {
@@ -59,14 +68,6 @@ public class JwtInterceptor implements HandlerInterceptor {
         User user = userService.getById(userId);
         if (user == null) {
             throw new ServiceException(Constants.CODE_401, "用户不存在，请重新登录");
-        }
-
-        // 用户密码加签验证 token
-        JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(user.getPassword())).build();
-        try {
-            jwtVerifier.verify(token); // 验证token
-        } catch (JWTVerificationException e) {
-            throw new ServiceException(Constants.CODE_401, "token验证失败，请重新登录");
         }
 
         HandlerMethod h = (HandlerMethod) handler;
