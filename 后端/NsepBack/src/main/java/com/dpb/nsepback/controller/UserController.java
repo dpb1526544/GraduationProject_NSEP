@@ -11,6 +11,7 @@ import com.dpb.nsepback.entity.User;
 import com.dpb.nsepback.mapper.UserMapper;
 import com.dpb.nsepback.service.IUserService;
 import com.dpb.nsepback.utils.PasswordUtils;
+import com.dpb.nsepback.utils.TokenUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -157,6 +158,10 @@ public class UserController {
     @DeleteMapping("/delete")
     @RequireRole({ROLE_ADMIN})
     public Result deletebyname(@RequestParam() String username){
+        User currentUser = TokenUtils.getCurrentUser();
+        if (currentUser != null && username.equals(currentUser.getUsername())) {
+            return Result.error(Constants.CODE_600, "当前登录账号不允许删除");
+        }
         Integer targetRole = userMapper.selectRoleByUsername(username);
         if (targetRole == null) {
             return Result.error(Constants.CODE_400, "用户不存在");

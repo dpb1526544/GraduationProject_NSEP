@@ -25,6 +25,10 @@ public class CorsConfig {
 
         // 1 设置访问源地址
         // Because setAllowCredentials(true) is enabled below, CORS must use explicit origins (wildcard "*" is forbidden).
+        if (allowedOrigins == null || allowedOrigins.trim().isEmpty()) {
+            throw new IllegalStateException("Invalid nsep.cors.allowed-origins: value is blank. "
+                    + "When credentials are enabled, configure explicit origins such as http://localhost:8080");
+        }
         Arrays.stream(allowedOrigins.split(","))
                 .map(String::trim)
                 .filter(s -> !s.isEmpty())
