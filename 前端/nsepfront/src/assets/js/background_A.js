@@ -98,7 +98,7 @@ const animation  =()=> {
         for (var i = 1,
                  l = stars.length; i < l; i++) {
             stars[i].draw();
-        };
+        }
 
         window.requestAnimationFrame(animation);
     }
