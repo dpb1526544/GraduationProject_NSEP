@@ -31,7 +31,6 @@
                   border="true"
                   style="width: 100%;">
           <el-table-column prop="username" label="学号" />
-          <el-table-column prop="password" label="密码" />
           <el-table-column prop="realname" label="姓名" />
           <el-table-column prop="email" label="邮箱" />
           <el-table-column label="权限">
@@ -81,6 +80,7 @@
         </el-form-item>
         <el-form-item label="密码">
           <el-input v-model="user.password"
+                    placeholder="留空则不修改密码"
                     clearable></el-input>
         </el-form-item>
         <el-form-item label="真实姓名">
@@ -257,7 +257,7 @@ export default {
     },
     //编辑用户信息
     edit(a){
-      this.user=a;
+      this.user={...a, password:''};
       this.currentusername=a.username;
       // if(a.role==2){
       //   this.user.role="教师"

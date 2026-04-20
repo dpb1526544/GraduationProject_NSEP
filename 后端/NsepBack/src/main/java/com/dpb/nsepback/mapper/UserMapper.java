@@ -30,7 +30,7 @@ public interface UserMapper extends BaseMapper<User>  {
     int updateEmail(UserDTO userDTO);
 
     // 分页查找
-    @Select("select username,realname,email,password,role from user where username like concat('%', #{search}, '%') limit #{beginPage},#{pageSize}")
+    @Select("select username,realname,email,role from user where username like concat('%', #{search}, '%') limit #{beginPage},#{pageSize}")
     List<User> getpage(Integer beginPage, Integer pageSize, String search);
 
     // 查询总数
@@ -72,6 +72,10 @@ public interface UserMapper extends BaseMapper<User>  {
     // 更新
     @Update("UPDATE user set password =#{password}, realname=#{realname},email=#{email},role=#{role} where username =#{username}")
     Integer updateuser(String username,String password, String realname,String email,String role);
+
+    // 更新（不修改密码）
+    @Update("UPDATE user set realname=#{realname},email=#{email},role=#{role} where username =#{username}")
+    Integer updateuserWithoutPassword(String username, String realname, String email, String role);
 
     // 更新邮箱（已在业务层完成密码校验）
     @Update("update user set email = #{email} where username = #{username}")
