@@ -36,7 +36,6 @@ public class TokenUtils {
     public void setUserService() {
         staticUserService = userService;
         if (StrUtil.isBlank(appJwtSecret)
-                || "change-this-jwt-secret-in-production".equals(appJwtSecret)
                 || "nsep-dev-only-secret-change-me-in-production".equals(appJwtSecret)
                 || appJwtSecret.length() < 32) {
             throw new IllegalStateException("NSEP_JWT_SECRET must be set to a strong secret (length >= 32)");

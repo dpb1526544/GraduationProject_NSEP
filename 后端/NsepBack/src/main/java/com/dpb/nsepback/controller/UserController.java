@@ -142,7 +142,7 @@ public class UserController {
 
     @PutMapping("/update")
     @RequireRole({ROLE_ADMIN})
-    public Result updatebyname(@RequestParam() String username,@RequestParam() String password,
+    public Result updatebyname(@RequestParam() String username,@RequestParam(required = false) String password,
                                @RequestParam() String realname,@RequestParam() String email,@RequestParam() Integer role){
         if (StrUtil.isBlank(password)) {
             userMapper.updateuserWithoutPassword(username, realname, email, role);

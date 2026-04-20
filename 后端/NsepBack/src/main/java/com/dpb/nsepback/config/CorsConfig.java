@@ -25,7 +25,7 @@ public class CorsConfig {
 
         // 1 设置访问源地址
         // Because setAllowCredentials(true) is enabled below, CORS must use explicit origins (wildcard "*" is forbidden).
-        if (allowedOrigins == null || allowedOrigins.trim().isEmpty()) {
+        if (allowedOrigins.trim().isEmpty()) {
             throw new IllegalStateException("Invalid nsep.cors.allowed-origins: value is blank. "
                     + "When credentials are enabled, configure explicit origins such as http://localhost:8080");
         }
@@ -44,6 +44,7 @@ public class CorsConfig {
 
         // 3 设置访问源请求方法
         corsConfiguration.addAllowedMethod("*");
+        // 允许携带 Cookie/认证信息，必须配合显式 origin 白名单（不能使用 "*"）以避免跨站凭据泄露风险。
         corsConfiguration.setAllowCredentials(true);
         corsConfiguration.setMaxAge(MAX_AGE);
 
