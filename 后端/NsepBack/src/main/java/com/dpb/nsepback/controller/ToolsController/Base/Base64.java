@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 
 @RestController
 public class Base64 {
@@ -60,7 +59,7 @@ public class Base64 {
         if (str == null) {
             return null;
         }
-        return Base64.getEncoder().encodeToString(str.getBytes(StandardCharsets.UTF_8));
+        return java.util.Base64.getEncoder().encodeToString(str.getBytes(StandardCharsets.UTF_8));
 
     }
 
@@ -70,7 +69,7 @@ public class Base64 {
             return null;
         }
         try {
-            byte[] b = Base64.getDecoder().decode(str);
+            byte[] b = java.util.Base64.getDecoder().decode(str);
             return new String(b, StandardCharsets.UTF_8);
         } catch (Exception e) {
             e.printStackTrace();
