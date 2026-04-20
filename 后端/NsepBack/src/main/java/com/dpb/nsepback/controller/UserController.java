@@ -43,7 +43,7 @@ public class UserController {
     public Result save(@RequestParam() String username, @RequestParam() String password,
                        @RequestParam() String realname, @RequestParam() String email, @RequestParam() String role){
         if (userMapper.selectbyun(username)==null){
-            userMapper.insertuser(username, PasswordUtils.ensureEncoded(password),realname,email,role);
+            userMapper.insertuser(username, PasswordUtils.encode(password),realname,email,role);
             return Result.success("success");
         }else{
             return Result.error(Constants.CODE_600,"用户已存在");
@@ -94,14 +94,14 @@ public class UserController {
         if (!PasswordUtils.matches(password, storedPassword)) {
             return Result.error(Constants.CODE_600, "原密码错误");
         }
-        userMapper.updatePasswordTwo(username, PasswordUtils.ensureEncoded(newpassword));
+        userMapper.updatePasswordTwo(username, PasswordUtils.encode(newpassword));
         return Result.success();
     }
 
     //邮箱重置密码
     @PostMapping("/resetpwd")
     public Result resetPwd(@RequestParam() String  username,@RequestParam() String password){
-        userMapper.updatePasswordTwo(username, PasswordUtils.ensureEncoded(password));
+        userMapper.updatePasswordTwo(username, PasswordUtils.encode(password));
         return Result.success();
     }
 
@@ -133,7 +133,7 @@ public class UserController {
     @RequireRole({3})
     public Result updatebyname(@RequestParam() String username,@RequestParam() String password,
                                @RequestParam() String realname,@RequestParam() String email,@RequestParam() String role){
-        userMapper.updateuser(username, PasswordUtils.ensureEncoded(password),realname,email,role);
+        userMapper.updateuser(username, PasswordUtils.encode(password),realname,email,role);
         return Result.success("success");
     }
 

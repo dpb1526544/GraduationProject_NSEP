@@ -30,7 +30,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         User one = getUserInfo(userDTO);
         if (one != null) {
             if (PasswordUtils.matches(userDTO.getPassword(), one.getPassword())) {
-                if (!PasswordUtils.isEncoded(one.getPassword())) {
+                if (PasswordUtils.shouldUpgrade(one.getPassword())) {
                     String upgradedPassword = PasswordUtils.encode(userDTO.getPassword());
                     userMapper.updatePasswordTwo(one.getUsername(), upgradedPassword);
                     one.setPassword(upgradedPassword);

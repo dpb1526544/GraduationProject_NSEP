@@ -1,10 +1,12 @@
 package com.dpb.nsepback.utils;
 
 import cn.hutool.crypto.digest.DigestUtil;
+import cn.hutool.crypto.digest.BCrypt;
 
 public class PasswordUtils {
 
-    private static final String PREFIX = "sha256$";
+    private static final String BCRYPT_PREFIX = "bcrypt$";
+    private static final String SHA256_PREFIX = "sha256$";
 
     private PasswordUtils() {
     }
@@ -13,28 +15,35 @@ public class PasswordUtils {
         if (rawPassword == null) {
             return null;
         }
-        return PREFIX + DigestUtil.sha256Hex(rawPassword);
+        return BCRYPT_PREFIX + BCrypt.hashpw(rawPassword);
     }
 
     public static boolean isEncoded(String password) {
-        return password != null && password.startsWith(PREFIX);
+        return isBcryptEncoded(password) || isSha256Encoded(password);
     }
 
-    public static String ensureEncoded(String password) {
-        if (password == null) {
-            return null;
-        }
-        return isEncoded(password) ? password : encode(password);
+    public static boolean shouldUpgrade(String storedPassword) {
+        return !isBcryptEncoded(storedPassword);
     }
 
     public static boolean matches(String rawPassword, String storedPassword) {
         if (rawPassword == null || storedPassword == null) {
             return false;
         }
-        if (isEncoded(storedPassword)) {
-            return encode(rawPassword).equals(storedPassword);
+        if (isBcryptEncoded(storedPassword)) {
+            return BCrypt.checkpw(rawPassword, storedPassword.substring(BCRYPT_PREFIX.length()));
+        }
+        if (isSha256Encoded(storedPassword)) {
+            return (SHA256_PREFIX + DigestUtil.sha256Hex(rawPassword)).equals(storedPassword);
         }
         return rawPassword.equals(storedPassword);
     }
-}
 
+    private static boolean isBcryptEncoded(String password) {
+        return password != null && password.startsWith(BCRYPT_PREFIX);
+    }
+
+    private static boolean isSha256Encoded(String password) {
+        return password != null && password.startsWith(SHA256_PREFIX);
+    }
+}
