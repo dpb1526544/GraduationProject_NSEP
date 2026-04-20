@@ -49,6 +49,10 @@ public interface UserMapper extends BaseMapper<User>  {
     @Select("select password from user where username=#{username}")
     String selectPasswordByUsername(String username);
 
+    // 根据学号查角色
+    @Select("select role from user where username=#{username}")
+    Integer selectRoleByUsername(String username);
+
     // 更新靶场完成数
     @Update("update user set finished = finished+1 where userid = #{userid}")
     int updateFinished(Integer userid);

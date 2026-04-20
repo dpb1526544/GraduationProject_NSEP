@@ -152,6 +152,13 @@ public class UserController {
     @DeleteMapping("/delete")
     @RequireRole({3})
     public Result deletebyname(@RequestParam() String username){
+        Integer targetRole = userMapper.selectRoleByUsername(username);
+        if (targetRole == null) {
+            return Result.error(Constants.CODE_400, "用户不存在");
+        }
+        if (Integer.valueOf(3).equals(targetRole)) {
+            return Result.error(Constants.CODE_600, "管理员账号不允许删除");
+        }
         userMapper.deleteeuser(username);
         return Result.success("success");
     }

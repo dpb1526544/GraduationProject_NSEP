@@ -31,7 +31,8 @@ public class CorsConfig {
                 .filter(s -> !"*".equals(s))
                 .forEach(corsConfiguration::addAllowedOrigin);
         if (corsConfiguration.getAllowedOrigins() == null || corsConfiguration.getAllowedOrigins().isEmpty()) {
-            throw new IllegalStateException("nsep.cors.allowed-origins must contain at least one explicit origin, e.g. http://localhost:8080");
+            throw new IllegalStateException("Invalid nsep.cors.allowed-origins: [" + allowedOrigins + "]. "
+                    + "When credentials are enabled, wildcard '*' is not allowed; configure explicit origins such as http://localhost:8080");
         }
 
         // 2 设置访问源请求头

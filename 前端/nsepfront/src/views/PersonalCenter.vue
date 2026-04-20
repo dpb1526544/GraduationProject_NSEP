@@ -146,7 +146,7 @@ export default {
           this.$message.success("修改成功,请重新登录")
           localStorage.removeItem("user")
           localStorage.removeItem("token")
-          router.push("/login");
+          router.replace("/login");
         } else {
           this.$message.error(res.msg)
         }
