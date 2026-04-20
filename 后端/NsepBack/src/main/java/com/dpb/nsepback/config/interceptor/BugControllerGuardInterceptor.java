@@ -21,7 +21,8 @@ public class BugControllerGuardInterceptor implements HandlerInterceptor {
         }
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         String packageName = handlerMethod.getBeanType().getPackage().getName();
-        if (!bugControllerEnabled && packageName.startsWith("com.dpb.nsepback.controller.BUGcontroller")) {
+        if (!bugControllerEnabled && (packageName.equals("com.dpb.nsepback.controller.BUGcontroller")
+                || packageName.startsWith("com.dpb.nsepback.controller.BUGcontroller."))) {
             throw new ServiceException(Constants.CODE_401, "高危教学接口已禁用");
         }
         return true;
