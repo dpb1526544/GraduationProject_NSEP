@@ -19,6 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+    private static final int ROLE_ADMIN = 3;
 
     @Resource
     UserMapper userMapper;
@@ -39,7 +40,7 @@ public class UserController {
 
     // 新增用户，注册
     @PostMapping("/save")
-    @RequireRole({3})
+    @RequireRole({ROLE_ADMIN})
     public Result save(@RequestParam() String username, @RequestParam() String password,
                        @RequestParam() String realname, @RequestParam() String email, @RequestParam() String role){
         if (!PasswordUtils.isStrong(password)) {
@@ -139,7 +140,7 @@ public class UserController {
     }
 
     @PutMapping("/update")
-    @RequireRole({3})
+    @RequireRole({ROLE_ADMIN})
     public Result updatebyname(@RequestParam() String username,@RequestParam() String password,
                                @RequestParam() String realname,@RequestParam() String email,@RequestParam() String role){
         if (StrUtil.isBlank(password)) {
@@ -154,13 +155,13 @@ public class UserController {
     }
 
     @DeleteMapping("/delete")
-    @RequireRole({3})
+    @RequireRole({ROLE_ADMIN})
     public Result deletebyname(@RequestParam() String username){
         Integer targetRole = userMapper.selectRoleByUsername(username);
         if (targetRole == null) {
             return Result.error(Constants.CODE_400, "用户不存在");
         }
-        if (Integer.valueOf(3).equals(targetRole)) {
+        if (targetRole == ROLE_ADMIN) {
             return Result.error(Constants.CODE_600, "管理员账号不允许删除");
         }
         userMapper.deleteeuser(username);
