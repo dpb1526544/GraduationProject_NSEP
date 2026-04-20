@@ -27,7 +27,7 @@ public interface ForumMapper extends BaseMapper<Forum> {
     List<Forum> getpage(Integer beginPage, Integer pageSize, String search, int state);
 
     // 查找总个数
-    @Select("select count(*) from forum where state=#{state} and (content like concat('%', #{search}, '%') or title like concat('%', #{search}, '%'))")
+    @Select("select count(*) from forum where state=#{state} and (content like concat('%', #{search}, '%') or title like concat('%', #{search}, '%')) ORDER BY time DESC")
     Integer gettotalpage(String search, int state);
 
     // 删除

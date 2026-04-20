@@ -27,7 +27,11 @@ public class CorsConfig {
         Arrays.stream(allowedOrigins.split(","))
                 .map(String::trim)
                 .filter(s -> !s.isEmpty())
+                .filter(s -> !"*".equals(s))
                 .forEach(corsConfiguration::addAllowedOrigin);
+        if (corsConfiguration.getAllowedOrigins() == null || corsConfiguration.getAllowedOrigins().isEmpty()) {
+            throw new IllegalStateException("nsep.cors.allowed-origins must include at least one concrete origin");
+        }
 
         // 2 设置访问源请求头
         corsConfiguration.addAllowedHeader("*");
