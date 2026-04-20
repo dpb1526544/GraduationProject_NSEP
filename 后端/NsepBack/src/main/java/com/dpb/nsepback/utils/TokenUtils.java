@@ -50,8 +50,11 @@ public class TokenUtils {
      * @return
      */
     public static String genToken(String userId, Integer role) {
+        if (role == null) {
+            throw new IllegalArgumentException("role must not be null when generating token");
+        }
         return JWT.create().withAudience(userId) // 将 user id 保存到 token 里面,作为载荷
-                .withClaim("role", role == null ? 0 : role)
+                .withClaim("role", role)
                 .withExpiresAt(DateUtil.offsetHour(new Date(), tokenExpireHours))
                 .sign(Algorithm.HMAC256(jwtSecret));
     }

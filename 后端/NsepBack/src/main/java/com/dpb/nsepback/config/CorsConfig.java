@@ -24,7 +24,7 @@ public class CorsConfig {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
 
         // 1 设置访问源地址
-        // CORS with credentials requires explicit origins (wildcard "*" is forbidden by spec).
+        // Because setAllowCredentials(true) is enabled below, CORS must use explicit origins (wildcard "*" is forbidden).
         Arrays.stream(allowedOrigins.split(","))
                 .map(String::trim)
                 .filter(s -> !s.isEmpty())
