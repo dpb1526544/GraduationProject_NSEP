@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 
 import javax.sql.DataSource;
 import javax.xml.parsers.DocumentBuilder;
@@ -19,6 +17,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.sql.*;
+import java.util.Base64;
 
 
 @RestController
@@ -132,33 +131,24 @@ public class XxeController {
 
     //加密
     public static String setEncryptionBase64(String str) {
-        byte[] b = null;
-        String s = null;
-        try {
-            b = str.getBytes("utf-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+        if (str == null) {
+            return null;
         }
-        if (b != null) {
-            s = new BASE64Encoder().encode(b);
-        }
-        return s;
+        return Base64.getEncoder().encodeToString(str.getBytes(StandardCharsets.UTF_8));
 
     }
 
     //解密
     public static String getDecodeBase64(String str) {
-        byte[] b = null;
-        String result = null;
-        if (str != null) {
-            BASE64Decoder decoder = new BASE64Decoder();
-            try {
-                b = decoder.decodeBuffer(str);
-                result = new String(b, "utf-8");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        if (str == null) {
+            return null;
         }
-        return result;
+        try {
+            byte[] b = Base64.getDecoder().decode(str);
+            return new String(b, StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

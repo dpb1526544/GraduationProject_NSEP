@@ -97,7 +97,7 @@ export default {
 
     saveinfo() {
       request
-        .get("/StuCourse/saveinfo", {
+        .post("/StuCourse/saveinfo", null, {
           params: {
             userid: this.user.userid,
             courseid: this.course.courseid,

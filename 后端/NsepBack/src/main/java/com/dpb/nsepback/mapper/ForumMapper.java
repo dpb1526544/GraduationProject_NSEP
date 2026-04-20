@@ -23,11 +23,11 @@ public interface ForumMapper extends BaseMapper<Forum> {
     List<Forum> selectbyname(String username, int state);
 
     // 分页显示
-    @Select("select * from  forum where state=#{state} and content like \"%${search}%\" or title like \"%${search}%\" ORDER BY time DESC limit #{beginPage},#{pageSize}")
+    @Select("select * from forum where state=#{state} and (content like concat('%', #{search}, '%') or title like concat('%', #{search}, '%')) ORDER BY time DESC limit #{beginPage},#{pageSize}")
     List<Forum> getpage(Integer beginPage, Integer pageSize, String search, int state);
 
     // 查找总个数
-    @Select("select count(*) from  forum where state=#{state} and content like \"%${search}%\" ORDER BY time DESC")
+    @Select("select count(*) from forum where state=#{state} and (content like concat('%', #{search}, '%') or title like concat('%', #{search}, '%'))")
     Integer gettotalpage(String search, int state);
 
     // 删除

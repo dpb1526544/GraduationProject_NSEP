@@ -269,13 +269,12 @@ export default {
             this.$message.error("两次输入的密码不一致，请检查");
           } else {
             request
-              .get(
-                "/user/resetpwd" +
-                  "?username=" +
-                  this.user.username +
-                  "&password=" +
-                  this.user.password
-              )
+              .post("/user/resetpwd", null, {
+                params: {
+                  username: this.user.username,
+                  password: this.user.password,
+                },
+              })
               .then((res) => {
                 if (res.code === "200") {
                   this.realemailcode = res.data;
@@ -338,4 +337,3 @@ export default {
   text-align: center;
 }
 </style>
-

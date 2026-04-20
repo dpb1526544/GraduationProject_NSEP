@@ -1,13 +1,11 @@
 package com.dpb.nsepback.controller;
 
 import com.dpb.nsepback.common.Result;
+import com.dpb.nsepback.config.RequireRole;
 import com.dpb.nsepback.entity.Course;
 import com.dpb.nsepback.mapper.CourseMapper;
 import com.dpb.nsepback.mapper.StuCourseMapper;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -38,7 +36,8 @@ public class CourseController {
     }
 
     // 删除课程
-    @GetMapping("/delete")
+    @DeleteMapping("/delete")
+    @RequireRole({2,3})
     public Result delete(@RequestParam() String  courseid) {
         int a=courseMapper.deleteByid(courseid);
         int b=stuCourseMapper.deleteByid(courseid);
@@ -49,7 +48,8 @@ public class CourseController {
     }
 
     // 添加课程
-    @GetMapping("/save")
+    @PostMapping("/save")
+    @RequireRole({2,3})
     public Result save(@RequestParam() String  coursename,@RequestParam() String  teacherid) {
         int a=courseMapper.add(coursename,teacherid);
         if(a==1)

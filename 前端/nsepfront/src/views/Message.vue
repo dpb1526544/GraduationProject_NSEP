@@ -102,7 +102,7 @@ export default {
       // console.log("nodata"+this.nodata)
     },
     readmessage(){
-      request.get("/message/read", {
+      request.put("/message/read", null, {
         params:{
           userid:this.user.userid
         }
@@ -111,7 +111,7 @@ export default {
       })
     },
     savemessage(){
-      request.get("/message/save", {
+      request.post("/message/save", null, {
         params:{
           title:this.message.title,
           content:this.message.content

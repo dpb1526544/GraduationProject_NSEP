@@ -1,14 +1,12 @@
 package com.dpb.nsepback.controller;
 
 import com.dpb.nsepback.common.Result;
+import com.dpb.nsepback.config.RequireRole;
 import com.dpb.nsepback.entity.StuProblem;
 import com.dpb.nsepback.mapper.DetailMapper;
 import com.dpb.nsepback.mapper.StuProblemMapper;
 import com.dpb.nsepback.mapper.UserMapper;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -27,7 +25,8 @@ public class StuProblemController {
     UserMapper userMapper;
 
     // 插入、更新
-    @GetMapping("/recordinfo")
+    @PostMapping("/recordinfo")
+    @RequireRole({1})
     public Result save(@RequestParam() Integer userid, @RequestParam() String problemid){
 
         stuProblemMapper.insertinfo(userid,problemid);

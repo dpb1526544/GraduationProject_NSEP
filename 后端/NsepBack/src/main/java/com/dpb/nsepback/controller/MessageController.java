@@ -2,12 +2,10 @@ package com.dpb.nsepback.controller;
 
 import com.dpb.nsepback.common.Constants;
 import com.dpb.nsepback.common.Result;
+import com.dpb.nsepback.config.RequireRole;
 import com.dpb.nsepback.entity.Message;
 import com.dpb.nsepback.mapper.MessageMapper;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -29,7 +27,8 @@ public class MessageController {
     }
 
     // 发布通知
-    @GetMapping("/save")
+    @PostMapping("/save")
+    @RequireRole({3})
     public Result save(@RequestParam() String title,@RequestParam() String content){
         //发布通知
         if(title!=null&&content!=null){
@@ -46,7 +45,7 @@ public class MessageController {
         return Result.success(messageMapper.checknew(userid));
     }
 
-    @GetMapping("/read")
+    @PutMapping("/read")
     public Result read(@RequestParam() String userid){
         //更新已读状态
         return Result.success(messageMapper.updatestate(userid));
