@@ -35,6 +35,11 @@ public class TokenUtils {
     @PostConstruct
     public void setUserService() {
         staticUserService = userService;
+        if (StrUtil.isBlank(appJwtSecret)
+                || "change-this-jwt-secret-in-production".equals(appJwtSecret)
+                || appJwtSecret.length() < 32) {
+            throw new IllegalStateException("NSEP_JWT_SECRET must be set to a strong secret (length >= 32)");
+        }
         jwtSecret = appJwtSecret;
         tokenExpireHours = appTokenExpireHours;
     }
@@ -47,7 +52,7 @@ public class TokenUtils {
     public static String genToken(String userId, Integer role) {
         return JWT.create().withAudience(userId) // 将 user id 保存到 token 里面,作为载荷
                 .withClaim("role", role == null ? 0 : role)
-                .withExpiresAt(DateUtil.offsetHour(new Date(), tokenExpireHours == null ? 2 : tokenExpireHours))
+                .withExpiresAt(DateUtil.offsetHour(new Date(), tokenExpireHours))
                 .sign(Algorithm.HMAC256(jwtSecret));
     }
 

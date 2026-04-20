@@ -73,7 +73,8 @@ public class JwtInterceptor implements HandlerInterceptor {
         HandlerMethod h = (HandlerMethod) handler;
         RequireRole requireRole = h.getMethodAnnotation(RequireRole.class);
         if (requireRole != null) {
-            boolean roleMatched = Arrays.stream(requireRole.value()).anyMatch(role -> role == user.getRole());
+            boolean roleMatched = Arrays.stream(requireRole.value())
+                    .anyMatch(role -> Integer.valueOf(role).equals(user.getRole()));
             if (!roleMatched) {
                 throw new ServiceException(Constants.CODE_401, "权限不足");
             }

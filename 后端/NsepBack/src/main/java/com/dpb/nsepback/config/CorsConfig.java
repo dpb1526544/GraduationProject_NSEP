@@ -24,13 +24,14 @@ public class CorsConfig {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
 
         // 1 设置访问源地址
+        // CORS with credentials requires explicit origins (wildcard "*" is forbidden by spec).
         Arrays.stream(allowedOrigins.split(","))
                 .map(String::trim)
                 .filter(s -> !s.isEmpty())
                 .filter(s -> !"*".equals(s))
                 .forEach(corsConfiguration::addAllowedOrigin);
         if (corsConfiguration.getAllowedOrigins() == null || corsConfiguration.getAllowedOrigins().isEmpty()) {
-            throw new IllegalStateException("nsep.cors.allowed-origins must include at least one concrete origin");
+            throw new IllegalStateException("nsep.cors.allowed-origins must contain at least one explicit origin, e.g. http://localhost:8080");
         }
 
         // 2 设置访问源请求头
