@@ -63,7 +63,7 @@ public interface UserMapper extends BaseMapper<User>  {
 
     // 插入
     @Update("insert into user (username,password,realname,email,role) values (#{username},#{password},#{realname},#{email},#{role})")
-    Integer insertuser(String username,String password, String realname,String email,String role);
+    Integer insertuser(String username,String password, String realname,String email,Integer role);
 
     // 删除
     @Update("DELETE FROM user WHERE username = #{username}")
@@ -71,11 +71,11 @@ public interface UserMapper extends BaseMapper<User>  {
 
     // 更新
     @Update("UPDATE user set password =#{password}, realname=#{realname},email=#{email},role=#{role} where username =#{username}")
-    Integer updateuser(String username,String password, String realname,String email,String role);
+    Integer updateuser(String username,String password, String realname,String email,Integer role);
 
     // 更新（不修改密码）
     @Update("UPDATE user set realname=#{realname},email=#{email},role=#{role} where username =#{username}")
-    Integer updateuserWithoutPassword(String username, String realname, String email, String role);
+    Integer updateuserWithoutPassword(String username, String realname, String email, Integer role);
 
     // 更新邮箱（已在业务层完成密码校验）
     @Update("update user set email = #{email} where username = #{username}")

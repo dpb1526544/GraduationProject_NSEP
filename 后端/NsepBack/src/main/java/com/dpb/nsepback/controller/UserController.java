@@ -42,7 +42,7 @@ public class UserController {
     @PostMapping("/save")
     @RequireRole({ROLE_ADMIN})
     public Result save(@RequestParam() String username, @RequestParam() String password,
-                       @RequestParam() String realname, @RequestParam() String email, @RequestParam() String role){
+                       @RequestParam() String realname, @RequestParam() String email, @RequestParam() Integer role){
         if (!PasswordUtils.isStrong(password)) {
             return Result.error(Constants.CODE_400, "密码强度不足，需至少8位且包含字母和数字");
         }
@@ -142,7 +142,7 @@ public class UserController {
     @PutMapping("/update")
     @RequireRole({ROLE_ADMIN})
     public Result updatebyname(@RequestParam() String username,@RequestParam() String password,
-                               @RequestParam() String realname,@RequestParam() String email,@RequestParam() String role){
+                               @RequestParam() String realname,@RequestParam() String email,@RequestParam() Integer role){
         if (StrUtil.isBlank(password)) {
             userMapper.updateuserWithoutPassword(username, realname, email, role);
             return Result.success("success");
